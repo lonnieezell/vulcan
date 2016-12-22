@@ -52,19 +52,21 @@ class MakeController extends BaseCommand
          */
         $crud = CLI::prompt('Generate CRUD?', ['y', 'n']);
         $view = $crud == 'y'
-            ? 'Controller/SimpleController'
-            : 'Controller/CRUDController';
+            ? 'Controller/CRUDController'
+            : 'Controller/SimpleController';
 
         $data = [
-            'namespace'      => 'App\Controllers',
-            'controllerName' => $name,
-            'today'          => date('Y-m-d H:i:a')
+            'namespace' => 'App\Controllers',
+            'name'      => $name,
+            'today'     => date('Y-m-d H:i:a')
         ];
 
         $destination = $this->determineOutputPath('Controllers').$name.'.php';
 
+        $overwrite = (bool)CLI::getOption('f');
+
         try {
-            $this->copyTemplate($view, $destination, $data);
+            $this->copyTemplate($view, $destination, $data, $overwrite);
         }
         catch (\Exception $e)
         {
