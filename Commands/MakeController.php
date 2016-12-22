@@ -61,6 +61,12 @@ class MakeController extends BaseCommand
             'today'     => date('Y-m-d H:i:a')
         ];
 
+        // Collect additional information for CRUDControllers.
+        if ($crud == 'y')
+        {
+            $data = array_merge($data, $this->getCRUDOptions());
+        }
+
         $destination = $this->determineOutputPath('Controllers').$name.'.php';
 
         $overwrite = (bool)CLI::getOption('f');
@@ -73,4 +79,38 @@ class MakeController extends BaseCommand
             $this->showError($e);
         }
     }
+
+    //--------------------------------------------------------------------
+
+    public function getCRUDOptions()
+    {
+        /*
+         * Model
+         */
+        $model = CLI::getOption('model');
+
+        if (empty($model))
+        {
+            $model = CLI::prompt('Model name');
+        }
+
+        /*
+         * Views?
+         */
+        $views = (bool)CLI::getOption('withViews');
+
+        if (empty($views))
+        {
+            $views = CLI::prompt('Generate views', ['y', 'n']);
+            $views = $views =='y'
+                ? true
+                : false;
+        }
+
+        return [
+            'model' => $model ?? 'UnnamedModel',
+            'views' => $views
+        ];
+    }
+
 }
