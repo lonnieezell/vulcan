@@ -1,5 +1,6 @@
 <?php namespace Vulcan\Libraries;
 
+use CodeIgniter\View\Parser;
 use Config\Services;
 use CodeIgniter\CLI\CLI;
 use Vulcan\Libraries\FileKit;
@@ -272,7 +273,7 @@ trait GeneratorTrait
         if (empty($this->parser))
         {
             $path         = realpath(__DIR__.'/../Views/').'/';
-            $this->parser = Services::parser();
+            $this->parser = new Parser(new \Config\View(), $path);
         }
 
         if (is_null($this->parser))
@@ -280,7 +281,9 @@ trait GeneratorTrait
             throw new \RuntimeException('Unable to create Parser instance.');
         }
 
-        $output = $this->parser->render($template_name, $data);
+        $output = $this->parser
+            ->setData($data)
+            ->render($template_name);
 
         // To allow for including any PHP code in the templates,
         // replace any '@php' and '@=' tags with their correct PHP syntax.
