@@ -2,7 +2,6 @@
 
 use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
-
 use Psy\VersionUpdater\Checker;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\InputArgument;
