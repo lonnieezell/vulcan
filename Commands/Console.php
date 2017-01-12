@@ -1,6 +1,8 @@
 <?php namespace Vulcan\Commands;
 
 use CodeIgniter\CLI\BaseCommand;
+use Psy\Configuration as PsyConfiguration;
+use Psy\Shell as PsyShell;
 
 /**
  * Creates a skeleton Controller
@@ -30,5 +32,16 @@ class MakeController extends BaseCommand
      */
     public function run(array $params=[])
     {
+      try {
+        // TODO: Create a method that configures the Psy\Shell
+        $config = new PsyConfiguration;
+        $shell = new PsyShell($config);
+
+        // TODO: Here we need to set CI as a scope variable
+        $shell->setScopeVariables([]);
+        $shell->run();
+      } catch (Exception $e) {
+        echo $e->getMessage() . PHP_EOL;
+      }
     }
 }

@@ -45,6 +45,13 @@ public $psr4 = [
 ];
 ```
 
+Also we need to do a symlink of the vulcan dependencies (this is provisional):
+
+```
+rm -rf vendor
+ln -s /home/vulcan/vendor .
+```
+
 Remember to give it the actual path on your drive, not mine.
 
 Now can we use it? You bet!
