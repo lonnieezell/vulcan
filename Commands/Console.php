@@ -15,7 +15,7 @@ use Psy\Shell;
  *
  * @package Vulcan\Commands
  */
-class MakeController extends BaseCommand
+class Console extends BaseCommand
 {
     protected $group = 'Vulcan';
 
@@ -34,57 +34,71 @@ class MakeController extends BaseCommand
     protected $description = 'Interact with your application.';
 
     /**
-     * Creates a skeleton controller file.
+     * Runs the Psysh Shell.
      */
-    public function run(array $params=[])
+    public function run(array $params = [])
     {
       $usageException = null;
 
-      // TODO: Use the Codeigniter ArgvInput instead
-      $input = new ArgvInput();
-
-      try {
-          $input->bind(new InputDefinition([
-              new InputOption('help',     'h',  InputOption::VALUE_NONE),
-              new InputOption('config',   'c',  InputOption::VALUE_REQUIRED),
-              new InputOption('version',  'v',  InputOption::VALUE_NONE),
-              new InputOption('cwd',      null, InputOption::VALUE_REQUIRED),
-              new InputOption('color',    null, InputOption::VALUE_NONE),
-              new InputOption('no-color', null, InputOption::VALUE_NONE),
-
-              new InputArgument('include', InputArgument::IS_ARRAY),
-          ]));
-      } catch (\RuntimeException $e) {
-          $usageException = $e;
-      }
-
-      $config = array();
+      $color   = (boolean) CLI::getOption('color');
+      $noColor = (boolean) CLI::getOption('no-color');
+      $config  = array();
 
       // Handle --config
-      if ($configFile = $input->getOption('config')) {
+      if ($configFile = CLI::getOption('config')) {
           $config['configFile'] = $configFile;
       }
 
       // Handle --color and --no-color
-      if ($input->getOption('color') && $input->getOption('no-color')) {
+      if ($color && $noColor) {
           $usageException = new \RuntimeException('Using both "--color" and "--no-color" options is invalid.');
-      } elseif ($input->getOption('color')) {
+      } elseif ($color) {
           $config['colorMode'] = Configuration::COLOR_MODE_FORCED;
-      } elseif ($input->getOption('no-color')) {
+      } elseif ($noColor) {
           $config['colorMode'] = Configuration::COLOR_MODE_DISABLED;
       }
 
+      // Psysh Shell instance
       $shell = new Shell(new Configuration($config));
 
       // Handle --help
-      if ($usageException !== null || $input->getOption('help')) {
+      if ($usageException !== null || (boolean) CLI::getOption('help')) {
           if ($usageException !== null) {
-              echo $usageException->getMessage() . PHP_EOL . PHP_EOL;
+              echo $usageException->getMessage() . PHP_EOL;
           }
+          $this->printHelpScreen($shell->getVersion(), 'console');
 
-          $version = $shell->getVersion();
-          $name    = basename(reset($_SERVER['argv']));
-          echo <<<EOL
+          exit($usageException === null ? 0 : 1);
+      }
+
+      // Handle --version
+      if ((boolean) CLI::getOption('version')) {
+          echo $shell->getVersion() . PHP_EOL;
+          exit(0);
+      }
+
+      // Pass additional arguments to Shell as 'includes'
+      // $shell->setIncludes($input->getArgument('include'));
+
+      try
+      {
+        $shell->run();
+      }
+      catch (Exception $e)
+      {
+        echo $e->getMessage() . PHP_EOL;
+
+        // TODO: this triggers the "exited unexpectedly" logic in the
+        // ForkingLoop, so we can't exit(1) after starting the shell...
+        // we need to fix this :)
+        // exit(1);
+      }
+    }
+
+    protected function printHelpScreen($version, $name)
+    {
+      // TODO: Figure out how to print a help screen without this ugly echo
+      echo <<<EOL
 $version
 
 Usage:
@@ -99,28 +113,5 @@ Options:
 --no-color    Disable colors in output.
 
 EOL;
-          exit($usageException === null ? 0 : 1);
-      }
-
-      // Handle --version
-      if ($input->getOption('version')) {
-          echo $shell->getVersion() . PHP_EOL;
-          exit(0);
-      }
-
-      // Pass additional arguments to Shell as 'includes'
-      // $shell->setIncludes($input->getArgument('include'));
-
-      try {
-          // And go!
-          $shell->run();
-      } catch (Exception $e) {
-          echo $e->getMessage() . PHP_EOL;
-
-          // TODO: this triggers the "exited unexpectedly" logic in the
-          // ForkingLoop, so we can't exit(1) after starting the shell...
-          // we need to fix this :)
-          // exit(1);
-      }
     }
 }
