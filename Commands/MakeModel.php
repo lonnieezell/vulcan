@@ -54,10 +54,7 @@ class MakeModel extends BaseCommand
 
         $this->collectOptions($this->options['name'], CLI::getOptions());
 
-        $data = [
-            'today' => date('Y-m-d H:ia')
-        ];
-        $data = array_merge($data, $this->options);
+        $data = $this->prepareData();
 
         $overwrite = (bool)CLI::getOption('f');
 
@@ -65,7 +62,7 @@ class MakeModel extends BaseCommand
 
         try
         {
-            $this->copyTemplate('Model', $destination, $data, $overwrite);
+            $this->copyTemplate('Model/Model', $destination, $data, $overwrite);
         } catch (\Exception $e)
         {
             $this->showError($e);
@@ -171,8 +168,19 @@ class MakeModel extends BaseCommand
      */
     protected function tableInfo(string $table, array $options = [])
     {
-        $db = \Config\Database::connect();
-        $db->initialize();
+        try
+        {
+            $db = \Config\Database::connect();
+            $db->initialize();
+        }
+        catch (\Throwable $e)
+        {
+            // If an error was thrown here, it's likely
+            // because we can't connect to the database.
+            // So - let the user know and move on.
+            CLI::error($e->getMessage());
+            return false;
+        }
 
         if (! $db->tableExists($this->options['table']))
         {
@@ -196,6 +204,8 @@ class MakeModel extends BaseCommand
         $this->options['useTimestamps']  = false;
         $this->options['useSoftDeletes'] = false;
 
+        // Still here? Try to determine correct values from the database
+        // for things like primary key, etc.
         foreach ($fields as $field)
         {
             // Primary key?
@@ -289,4 +299,50 @@ class MakeModel extends BaseCommand
 
         return $str;
     }
+
+    //--------------------------------------------------------------------
+
+    /**
+     * Converts the data into string that can be inserted in the model.
+     */
+    public function prepareData()
+    {
+        $data = [
+            'name'            => $this->options['name'],
+            'table'           => $this->options['table'],
+            'primaryKey'      => $this->options['primaryKey'],
+            'useSoftDeletes'  => $this->options['useSoftDeletes'] === true ? 'true' : 'false',
+            'useTimestamps'   => $this->options['useTimestamps'] === true ? 'true' : 'false',
+            'createdField'    => $this->options['createdField'],
+            'updatedField'    => $this->options['updatedField'],
+            'returnType'      => $this->options['returnType'],
+            'validationRules' => $this->options['validationRules'],
+            'dateFormat'      => $this->options['dateFormat'],
+            'today'           => date('Y-m-d H:ia'),
+        ];
+
+        if (is_array($this->options['allowedFields']))
+        {
+            $fields = [];
+
+            foreach ($this->options['allowedFields'] as $field)
+            {
+                if ($field->name == $data['primaryKey']
+                    || $field->name == $data['createdField']
+                    || $field->name == $data['updatedField'])
+                {
+                    continue;
+                }
+
+                $fields[] = "'".$field->name."'";
+            }
+        }
+
+        $data['allowedFields'] = isset($fields)
+            ? implode(', ', $fields)
+            : null;
+
+        return $data;
+    }
+
 }
