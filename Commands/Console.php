@@ -75,6 +75,11 @@ class Console extends BaseCommand
       // Pass additional arguments to Shell as 'includes'
       // $shell->setIncludes($input->getArgument('include'));
 
+      // Pass additional variables to Shell
+      // Example:
+        // 'controller' => $this # will include this controller 
+      // $shell->setScopeVariables([]);
+
       try
       {
         $shell->run();
