@@ -56,7 +56,7 @@ class MakeController extends BaseCommand
             : 'Controller/SimpleController';
 
         $data = [
-            'namespace' => 'App\Controllers',
+            'namespace' => is_null(CLI::getOption('n')) ? 'App' : CLI::getOption('n'),
             'name'      => $name,
             'today'     => date('Y-m-d H:i:a')
         ];
@@ -67,7 +67,7 @@ class MakeController extends BaseCommand
             $data = array_merge($data, $this->getCRUDOptions());
         }
 
-        $destination = $this->determineOutputPath('Controllers').$name.'.php';
+        $destination = $this->determineOutputPath('Controllers',$data['namespace']).$name.'.php';
 
         $overwrite = (bool)CLI::getOption('f');
 

@@ -50,12 +50,12 @@ class MakeCommand extends BaseCommand
         $view = 'Command/Command';
 
         $data = [
-          'namespace' => 'Codeigniter\Commands',
+          'namespace' => is_null(CLI::getOption('n')) ? 'App' : CLI::getOption('n'),
           'name'      => $name,
           'today'     => date('Y-m-d H:i:a')
         ];
 
-        $destination = $this->determineOutputPath('Commands').$name.'.php';
+        $destination = $this->determineOutputPath('Commands',$data['namespace']).$name.'.php';
 
         $overwrite = (bool)CLI::getOption('f');
 

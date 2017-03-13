@@ -3,6 +3,7 @@
 use CodeIgniter\View\Parser;
 use Config\Services;
 use CodeIgniter\CLI\CLI;
+use Config\Autoload;
 use Vulcan\Libraries\FileKit;
 
 /**
@@ -16,6 +17,11 @@ trait GeneratorTrait
      * @var \CodeIgniter\View\Parser
      */
     protected $parser;
+
+     /**
+     * @var const
+     */
+    protected $rootPath = BASEPATH . "../";
 
     //--------------------------------------------------------------------
 
@@ -38,7 +44,7 @@ trait GeneratorTrait
         {
             if (! $overwrite)
             {
-                CLI::write(CLI::color("\t".strtolower(lang('Vulcan.exists')).": ", 'blue').str_replace(APPPATH, '',
+                CLI::write(CLI::color("\t".strtolower(lang('Vulcan.exists')).": ", 'blue').str_replace(realpath($this->rootPath), '',
                         $path));
 
                 return true;
@@ -68,11 +74,11 @@ trait GeneratorTrait
 
         if ($overwrite && $file_exists)
         {
-            CLI::write(CLI::color("\t".strtolower(lang('Vulcan.overwrote'))." ", 'light_red').str_replace(APPPATH, '',
+            CLI::write(CLI::color("\t".strtolower(lang('Vulcan.overwrote'))." ", 'light_red').str_replace(realpath($this->rootPath), '',
                     $path));
         } else
         {
-            CLI::write(CLI::color("\t".strtolower(lang('Vulcan.created'))." ", 'yellow').str_replace(APPPATH, '',
+            CLI::write(CLI::color("\t".strtolower(lang('Vulcan.created'))." ", 'yellow').str_replace(realpath($this->rootPath), '',
                     $path));
         }
 
@@ -215,11 +221,11 @@ trait GeneratorTrait
 
         if ($success)
         {
-            CLI::write(CLI::color("\t".strtolower(lang('Vulcan.modified'))." ", 'cyan').str_replace(APPPATH, '',
+            CLI::write(CLI::color("\t".strtolower(lang('Vulcan.modified'))." ", 'cyan').str_replace(realpath($this->rootPath), '',
                     $path));
         } else
         {
-            CLI::write(CLI::color("\t".strtolower(lang('Vulcan.error'))." ", 'light_red').str_replace(APPPATH, '',
+            CLI::write(CLI::color("\t".strtolower(lang('Vulcan.error'))." ", 'light_red').str_replace(realpath($this->rootPath), '',
                     $path));
         }
 
@@ -330,7 +336,7 @@ trait GeneratorTrait
             return $path;
         }
 
-        return APPPATH.$path;
+        return $path;
     }
 
     //--------------------------------------------------------------------
@@ -465,9 +471,13 @@ trait GeneratorTrait
      *
      * @return string
      */
-    protected function determineOutputPath($folder='')
+    protected function determineOutputPath($folder='', $namespace = 'App')
     {
-        $path = APPPATH . $folder;
+        // Get namespace location form  PSR4 paths.
+        $config = new Autoload();      
+        $location = $config->psr4[$namespace];
+
+        $path = $location . "/". $folder; 
 
         return rtrim($path, '/ ') .'/';
     }

@@ -58,7 +58,7 @@ class MakeModel extends BaseCommand
 
         $overwrite = (bool)CLI::getOption('f');
 
-        $destination = $this->determineOutputPath('Models').$name.'.php';
+        $destination = $this->determineOutputPath('Models', $this->opthions['namespace']).$name.'.php';
 
         try
         {
@@ -90,6 +90,8 @@ class MakeModel extends BaseCommand
                 ? CLI::prompt('Primary key', 'id')
                 : $options['primaryKey'];
         }
+
+        $this->options['namespace'] = is_null(CLI::getOption('n')) ? 'App' : CLI::getOption('n');
 
         // Collect the fields from the table itself, if we have one
         $this->options['allowedFields'] = $this->tableInfo($this->options['table'], $options);
