@@ -58,7 +58,7 @@ class MakeModel extends BaseCommand
 
         $overwrite = (bool)CLI::getOption('f');
 
-        $destination = $this->determineOutputPath('Models', $this->opthions['namespace']).$name.'.php';
+        $destination = $this->determineOutputPath('Models', $this->options['namespace']).$name.'.php';
 
         try
         {
