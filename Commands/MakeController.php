@@ -32,6 +32,32 @@ class MakeController extends BaseCommand
     /**
      * Creates a skeleton controller file.
      */
+
+      /**
+     * the Command's usage
+     *
+     * @var string
+     */
+    protected $usage = 'make:controller [controller_name] [Options]';
+
+    /**
+     * the Command's Arguments
+     *
+     * @var array
+     */
+    protected $arguments = array(
+        'controller_name' => 'The controller file name'
+    );
+
+     /**
+     * the Command's Options
+     *
+     * @var array
+     */
+    protected $options = array(
+        '-n' => 'Set Controller namespace',
+        '-f' => 'overwrite files'
+    );
     public function run(array $params=[])
     {
         /*

@@ -30,6 +30,32 @@ class MakeMigration extends BaseCommand
      */
     protected $description = 'Creates a skeleton migration file.';
 
+     /**
+     * the Command's usage
+     *
+     * @var string
+     */
+    protected $usage = 'make:migration [migration_name] [Options]';
+
+    /**
+     * the Command's Arguments
+     *
+     * @var array
+     */
+    protected $arguments = array(
+        'migration_name' => 'The migration file name'
+    );
+
+     /**
+     * the Command's Options
+     *
+     * @var array
+     */
+    protected $options = array(
+        '-n' => 'Set migration namespace',
+        '-f' => 'overwrite files'
+    );    
+
     /**
      * Creates a skeleton Migration file.
      */

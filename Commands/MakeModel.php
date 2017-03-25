@@ -21,7 +21,33 @@ class MakeModel extends BaseCommand
 
     protected $description = 'Creates a skeleton Model file, optionally from a database.';
 
-    protected $options = [
+    /**
+     * the Command's usage
+     *
+     * @var string
+     */
+    protected $usage = 'make:model [model_name] [Options]';
+
+    /**
+     * the Command's Arguments
+     *
+     * @var array
+     */
+    protected $arguments = array(
+        'model_name' => 'The model file name'
+    );
+
+     /**
+     * the Command's Options
+     *
+     * @var array
+     */
+    protected $options = array(
+        '-n' => 'Set model namespace',
+        '-f' => 'overwrite files'
+    );   
+
+    protected $optionsList = [
         'name'            => '',
         'table'           => '',
         'primaryKey'      => '',
@@ -50,15 +76,15 @@ class MakeModel extends BaseCommand
             $name = CLI::prompt('Model name');
         }
 
-        $this->options['name'] = ucfirst($name);
+        $this->optionsList['name'] = ucfirst($name);
 
-        $this->collectOptions($this->options['name'], CLI::getOptions());
+        $this->collectOptions($this->optionsList['name'], CLI::getOptions());
 
         $data = $this->prepareData();
 
         $overwrite = (bool)CLI::getOption('f');
 
-        $destination = $this->determineOutputPath('Models', $this->options['namespace']).$name.'.php';
+        $destination = $this->determineOutputPath('Models', $this->optionsList['namespace']).$name.'.php';
 
         try
         {
@@ -76,25 +102,25 @@ class MakeModel extends BaseCommand
         helper('inflector');
 
         // Table name
-        if (empty($this->options['table']))
+        if (empty($this->optionsList['table']))
         {
-            $this->options['table'] = empty($options['table'])
+            $this->optionsList['table'] = empty($options['table'])
                 ? CLI::prompt('Table name', plural(strtolower(str_replace('Model', '', $name))))
-                : $options['table'];
+                : $optionsList['table'];
         }
 
         // Primary Key
-        if (empty($this->options['primaryKey']))
+        if (empty($this->optionsList['primaryKey']))
         {
-            $this->options['primaryKey'] = empty($options['primaryKey'])
+            $this->optionsList['primaryKey'] = empty($options['primaryKey'])
                 ? CLI::prompt('Primary key', 'id')
-                : $options['primaryKey'];
+                : $optionsList['primaryKey'];
         }
 
-        $this->options['namespace'] = is_null(CLI::getOption('n')) ? 'App' : CLI::getOption('n');
+        $this->optionsList['namespace'] = is_null(CLI::getOption('n')) ? 'App' : CLI::getOption('n');
 
         // Collect the fields from the table itself, if we have one
-        $this->options['allowedFields'] = $this->tableInfo($this->options['table'], $options);
+        $this->optionsList['allowedFields'] = $this->tableInfo($this->optionsList['table'], $options);
     }
 
     /**
@@ -184,7 +210,7 @@ class MakeModel extends BaseCommand
             return false;
         }
 
-        if (! $db->tableExists($this->options['table']))
+        if (! $db->tableExists($this->optionsList['table']))
         {
             if (empty($options['fields']))
             {
@@ -203,8 +229,8 @@ class MakeModel extends BaseCommand
             return false;
         }
 
-        $this->options['useTimestamps']  = false;
-        $this->options['useSoftDeletes'] = false;
+        $this->optionsList['useTimestamps']  = false;
+        $this->optionsList['useSoftDeletes'] = false;
 
         // Still here? Try to determine correct values from the database
         // for things like primary key, etc.
@@ -213,20 +239,20 @@ class MakeModel extends BaseCommand
             // Primary key?
             if (! empty($field->primary_key) && $field->primary_key == 1)
             {
-                $this->options['primaryKey'] = $field->name;
+                $this->optionsList['primaryKey'] = $field->name;
             } // Timestamps
-            elseif ($field->name == $this->options['createdField'])
+            elseif ($field->name == $this->optionsList['createdField'])
             {
-                $this->options['useTimestamps'] = true;
+                $this->optionsList['useTimestamps'] = true;
             } // Soft Deletes
             elseif ($field->name == 'deleted')
             {
-                $this->options['useSoftDeletes'] = true;
+                $this->optionsList['useSoftDeletes'] = true;
             }
         }
 
         // Set our validation rules based on these fields.
-        $this->options['validationRules'] = $this->buildValidationRules($fields);
+        $this->optionsList['validationRules'] = $this->buildValidationRules($fields);
 
         return $fields;
     }
@@ -310,24 +336,24 @@ class MakeModel extends BaseCommand
     public function prepareData()
     {
         $data = [
-            'name'            => $this->options['name'],
-            'table'           => $this->options['table'],
-            'primaryKey'      => $this->options['primaryKey'],
-            'useSoftDeletes'  => $this->options['useSoftDeletes'] === true ? 'true' : 'false',
-            'useTimestamps'   => $this->options['useTimestamps'] === true ? 'true' : 'false',
-            'createdField'    => $this->options['createdField'],
-            'updatedField'    => $this->options['updatedField'],
-            'returnType'      => $this->options['returnType'],
-            'validationRules' => $this->options['validationRules'],
-            'dateFormat'      => $this->options['dateFormat'],
+            'name'            => $this->optionsList['name'],
+            'table'           => $this->optionsList['table'],
+            'primaryKey'      => $this->optionsList['primaryKey'],
+            'useSoftDeletes'  => $this->optionsList['useSoftDeletes'] === true ? 'true' : 'false',
+            'useTimestamps'   => $this->optionsList['useTimestamps'] === true ? 'true' : 'false',
+            'createdField'    => $this->optionsList['createdField'],
+            'updatedField'    => $this->optionsList['updatedField'],
+            'returnType'      => $this->optionsList['returnType'],
+            'validationRules' => $this->optionsList['validationRules'],
+            'dateFormat'      => $this->optionsList['dateFormat'],
             'today'           => date('Y-m-d H:ia'),
         ];
 
-        if (is_array($this->options['allowedFields']))
+        if (is_array($this->optionsList['allowedFields']))
         {
             $fields = [];
 
-            foreach ($this->options['allowedFields'] as $field)
+            foreach ($this->optionsList['allowedFields'] as $field)
             {
                 if ($field->name == $data['primaryKey']
                     || $field->name == $data['createdField']

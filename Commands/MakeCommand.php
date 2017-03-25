@@ -22,13 +22,40 @@ class MakeCommand extends BaseCommand
      * @var string
      */
     protected $name = 'make:command';
+    
 
     /**
      * the Command's short description
      *
      * @var string
      */
-    protected $description = 'Creates a skeleton command file.';
+    protected $description = 'Creates a skeleton command file.';    
+
+     /**
+     * the Command's usage
+     *
+     * @var string
+     */
+    protected $usage = 'make:command [command_name] [Options]';
+
+    /**
+     * the Command's Arguments
+     *
+     * @var array
+     */
+    protected $arguments = array(
+        'command_name' => 'The command file name'
+    );
+
+     /**
+     * the Command's Options
+     *
+     * @var array
+     */
+    protected $options = array(
+        '-n' => 'Set command namespace',
+        '-f' => 'overwrite files'
+    );
 
     /**
      * Creates a skeleton command file.
