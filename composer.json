@@ -1,0 +1,8 @@
+{
+    "name": "vulcan/vulcan",
+    "description": "CLI tools for CodeIgniter 4",
+    "type": "codeigniter-command",
+    "require": {
+        "psy/psysh": "@stable"
+    }
+}
