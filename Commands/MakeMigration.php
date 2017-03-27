@@ -42,19 +42,19 @@ class MakeMigration extends BaseCommand
      *
      * @var array
      */
-    protected $arguments = array(
+    protected $arguments = [
         'migration_name' => 'The migration file name'
-    );
+    ];
 
      /**
      * the Command's Options
      *
      * @var array
      */
-    protected $options = array(
+    protected $options = [
         '-n' => 'Set migration namespace',
         '-f' => 'overwrite files'
-    );    
+    ];    
 
     /**
      * Creates a skeleton Migration file.
@@ -76,7 +76,7 @@ class MakeMigration extends BaseCommand
         $view = 'Migration/Migration';
 
         $data = [
-          'namespace' => is_null(CLI::getOption('n')) ? 'App' : CLI::getOption('n'),
+          'namespace' => 'namespace' => CLI::getOption('n') ?? 'App',
           'name'      => $name,
           'today'     => date('Y-m-d H:i:a')
         ];

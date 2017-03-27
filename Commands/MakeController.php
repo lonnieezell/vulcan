@@ -45,19 +45,19 @@ class MakeController extends BaseCommand
      *
      * @var array
      */
-    protected $arguments = array(
+    protected $arguments = [
         'controller_name' => 'The controller file name'
-    );
+    ];
 
      /**
      * the Command's Options
      *
      * @var array
      */
-    protected $options = array(
+    protected $options = [
         '-n' => 'Set Controller namespace',
         '-f' => 'overwrite files'
-    );
+    ];
     public function run(array $params=[])
     {
         /*
@@ -82,7 +82,7 @@ class MakeController extends BaseCommand
             : 'Controller/SimpleController';
 
         $data = [
-            'namespace' => is_null(CLI::getOption('n')) ? 'App' : CLI::getOption('n'),
+            'namespace' => 'namespace' => CLI::getOption('n') ?? 'App',
             'name'      => $name,
             'today'     => date('Y-m-d H:i:a')
         ];

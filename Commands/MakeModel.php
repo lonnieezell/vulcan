@@ -33,9 +33,9 @@ class MakeModel extends BaseCommand
      *
      * @var array
      */
-    protected $arguments = array(
+    protected $arguments = [
         'model_name' => 'The model file name'
-    );
+    ];
 
      /**
      * the Command's Options
@@ -117,7 +117,7 @@ class MakeModel extends BaseCommand
                 : $optionsList['primaryKey'];
         }
 
-        $this->optionsList['namespace'] = is_null(CLI::getOption('n')) ? 'App' : CLI::getOption('n');
+        $this->optionsList['namespace'] = 'namespace' => CLI::getOption('n') ?? 'App',
 
         // Collect the fields from the table itself, if we have one
         $this->optionsList['allowedFields'] = $this->tableInfo($this->optionsList['table'], $options);

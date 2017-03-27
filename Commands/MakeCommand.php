@@ -43,19 +43,19 @@ class MakeCommand extends BaseCommand
      *
      * @var array
      */
-    protected $arguments = array(
+    protected $arguments = [
         'command_name' => 'The command file name'
-    );
+    ];
 
      /**
      * the Command's Options
      *
      * @var array
      */
-    protected $options = array(
+    protected $options = [
         '-n' => 'Set command namespace',
         '-f' => 'overwrite files'
-    );
+    ];
 
     /**
      * Creates a skeleton command file.
@@ -77,7 +77,7 @@ class MakeCommand extends BaseCommand
         $view = 'Command/Command';
 
         $data = [
-          'namespace' => is_null(CLI::getOption('n')) ? 'App' : CLI::getOption('n'),
+          'namespace' => 'namespace' => CLI::getOption('n') ?? 'App',
           'name'      => $name,
           'today'     => date('Y-m-d H:i:a')
         ];
