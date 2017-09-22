@@ -61,7 +61,7 @@ Now can we use it? You bet!
 Using CodeIgniter 4's built-in cli tools you can call any of the Vulcan commands now:
 
 ```
-$ php ci.php
+$ php spark
 ```
 
 This will provide a list of commands and a short explanation.
