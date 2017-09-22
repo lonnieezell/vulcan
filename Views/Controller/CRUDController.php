@@ -27,7 +27,7 @@ class {name} extends Controller
     public function listAll()
     {
         echo view('{name}/listAll', [
-            'rows' => $this->model->paginate(20);
+            'rows' => $this->model->paginate(20),
         ]);
     }
 
