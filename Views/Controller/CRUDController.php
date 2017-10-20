@@ -1,4 +1,4 @@
-<?php namespace {namespace};
+@php namespace {namespace};
 
 use CodeIgniter\Controller;
 
