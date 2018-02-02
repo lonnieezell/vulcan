@@ -32,7 +32,9 @@ class MakeEntity extends BaseCommand
 
     protected $options = [
         'table'         => null,
-	    'propertyList'  => ''
+	    'propertyList'  => '',
+        'docProperties' => '',
+        'dates'         => []
     ];
 
     /**
@@ -60,7 +62,9 @@ class MakeEntity extends BaseCommand
 			'namespace'     => 'Codeigniter\Entities',
 			'name'          => $name,
 			'today'         => date('Y-m-d H:i:a'),
-			'propertyList'  => $this->options['propertyList']
+			'propertyList'  => $this->options['propertyList'],
+            'docProperties' => $this->options['docProperties'],
+            'casts'         => $this->options['dates'],
         ];
 
         $destination = $this->determineOutputPath('Entities').$name.'.php';
@@ -84,7 +88,7 @@ class MakeEntity extends BaseCommand
 		if (empty($this->options['table']))
 		{
 			$this->options['table'] = empty($options['table'])
-				? CLI::prompt('Table name', plural(strtolower(str_replace('Model', '', $name))))
+				? CLI::prompt('Table name to reference', plural(strtolower($name)))
 				: $options['table'];
 		}
 
@@ -120,18 +124,39 @@ class MakeEntity extends BaseCommand
 			return false;
 		}
 
-		$this->options['propertyList'] = $this->formatProperties($fields);
+		$this->formatProperties($fields);
     }
 
 	protected function formatProperties(array $fields)
 	{
-		$list = [];
+		$properties = [];
+		$docProperties = [];
 
 		foreach ($fields as $field)
 		{
-			$list[] = "\tprotected \${$field->name};";
+			$properties[]    = "\tprotected \${$field->name};";
+            $docProperties[] = " * @property \${$field->name}";
+
+            if (in_array($field->name, ['created_at', 'updated_at']))
+            {
+                $this->options['dates'][] = $field->name;
+            }
 		}
 
-		return implode("\n", $list);
+		$this->options['propertyList'] = implode("\n", $properties);
+		$this->options['docProperties'] = implode("\n", $docProperties);
+
+		// Format our dates string if we have anything there
+        if (! empty($this->options['dates']))
+        {
+            $dateStr = '';
+            foreach ($this->options['dates'] as $date)
+            {
+                $dateStr .= "'{$date}', ";
+            }
+
+            $this->options['dates'] = "\n\t\t\t'dates' => [". trim($dateStr, ', ') ."],\n\t\t";
+        }
     }
+
 }
