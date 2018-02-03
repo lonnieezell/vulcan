@@ -250,6 +250,11 @@ class MakeModel extends BaseCommand
 
         foreach ($fields as $field)
         {
+            if (in_array($field->name, ['created_at', 'updated_at']))
+            {
+                continue;
+            }
+
             $rule = [];
 
             switch ($field->type)
@@ -291,7 +296,7 @@ class MakeModel extends BaseCommand
 
             $rules[$field->name] = implode('|', $rule);
         }
-
+        
         $str = $this->stringify($rules);
 
         // Clean up the resulting array a bit
