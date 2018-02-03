@@ -296,7 +296,7 @@ class MakeModel extends BaseCommand
 
             $rules[$field->name] = implode('|', $rule);
         }
-        
+
         $str = $this->stringify($rules);
 
         // Clean up the resulting array a bit

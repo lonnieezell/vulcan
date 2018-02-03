@@ -1,8 +1,8 @@
 <?php 
 namespace Vulcan\Commands;
 
-use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
+use CodeIgniter\CLI\BaseCommand;
 use Vulcan\Libraries\GeneratorTrait;
 
 /**
@@ -32,6 +32,8 @@ class MakeCommand extends BaseCommand
 
     /**
      * Creates a skeleton command file.
+     *
+     * @param array $params
      */
     public function run(array $params=[])
     {
