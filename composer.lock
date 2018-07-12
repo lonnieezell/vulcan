@@ -4,6 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
+
     "content-hash": "93d475a7ad6d7563d7c99b0dd0417556",
     "packages": [
         {
@@ -51,6 +52,7 @@
             "license": [
                 "MIT"
             ],
+
             "authors": [
                 {
                     "name": "Mike van Riel",
@@ -101,6 +103,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
+
                 "MIT"
             ],
             "authors": [

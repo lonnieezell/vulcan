@@ -1,5 +1,9 @@
 {
+    "name": "lonnieezell/vulcan",
+    "description": "CLI tools for CodeIgniter 4",
+    "type": "codeigniter-command",
+    "license": "MIT",
     "require": {
-        "phpdocumentor/phpdocumentor": "2.*"
+        "psy/psysh": "@stable"
     }
 }

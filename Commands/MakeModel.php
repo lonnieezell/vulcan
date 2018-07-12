@@ -278,6 +278,11 @@ class MakeModel extends BaseCommand
 
         foreach ($fields as $field)
         {
+            if (in_array($field->name, ['created_at', 'updated_at']))
+            {
+                continue;
+            }
+
             $rule = [];
 
             switch ($field->type)

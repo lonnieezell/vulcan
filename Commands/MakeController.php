@@ -1,7 +1,7 @@
 <?php namespace Vulcan\Commands;
 
-use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
+use CodeIgniter\CLI\BaseCommand;
 use Vulcan\Libraries\GeneratorTrait;
 
 /**
@@ -31,6 +31,8 @@ class MakeController extends BaseCommand
 
     /**
      * Creates a skeleton controller file.
+     *
+     * @param array $params
      */
 
       /**
