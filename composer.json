@@ -2,6 +2,7 @@
     "name": "lonnieezell/vulcan",
     "description": "CLI tools for CodeIgniter 4",
     "type": "codeigniter-command",
+    "license": "MIT",
     "require": {
         "psy/psysh": "@stable"
     }
