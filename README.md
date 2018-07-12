@@ -18,7 +18,29 @@ Vulcan is a set of command line interface tools for CodeIgniter 4 that help you 
 
 **Download the Code**
 
-Until the project gets closer to completion, there is no packagist.com integration or other slick way to install. Just keep it simple for now and clone the repo to somewhere you'll find it again:
+### Composer
+
+The preferred method to install is via Composer. Add the following to the `require-dev` section of your project's 
+composer.json file: 
+
+```
+"lonnieezell/vulcan": "dev-develop"
+```
+
+**Let Your CodeIgniter Project Know**
+
+We need to let your project know where to find the commands, so open up `/application/Config/Autoload.php` and create 
+the `Vulcan` namespace in the `$psr4` array:
+
+```
+public $psr4 = [
+    'Vulcan' => ROOTPATH.'vendor/lonnieezell/vulcan',
+];
+```
+
+### Manual Installation
+
+Clone the repo to somewhere you'll find it again:
 
 ```
 $ git clone git@github.com:lonnieezell/vulcan.git
