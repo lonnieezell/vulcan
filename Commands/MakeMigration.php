@@ -1,42 +1,41 @@
 <?php 
 namespace Vulcan\Commands;
 
-use CodeIgniter\CLI\CLI;
 use CodeIgniter\CLI\BaseCommand;
+use CodeIgniter\CLI\CLI;
 use Vulcan\Libraries\GeneratorTrait;
 
 /**
- * Creates a skeleton Command
+ * Creates a skeleton Migration
  *
  * @package Vulcan\Commands
  */
-class MakeCommand extends BaseCommand
+class MakeMigration extends BaseCommand
 {
     use GeneratorTrait;
 
     protected $group = 'Vulcan';
 
     /**
-     * The Command's name
+     * The Migration's name
      *
      * @var string
      */
-    protected $name = 'make:command';
-    
+    protected $name = 'make:migration';
 
     /**
-     * the Command's short description
+     * the Migration's short description
      *
      * @var string
      */
-    protected $description = 'Creates a skeleton command file.';    
+    protected $description = 'Creates a skeleton migration file.';
 
      /**
      * the Command's usage
      *
      * @var string
      */
-    protected $usage = 'make:command [command_name] [Options]';
+    protected $usage = 'make:migration [migration_name] [Options]';
 
     /**
      * the Command's Arguments
@@ -44,7 +43,7 @@ class MakeCommand extends BaseCommand
      * @var array
      */
     protected $arguments = [
-        'command_name' => 'The command file name'
+        'migration_name' => 'The migration file name'
     ];
 
      /**
@@ -53,14 +52,12 @@ class MakeCommand extends BaseCommand
      * @var array
      */
     protected $options = [
-        '-n' => 'Set command namespace',
+        '-n' => 'Set migration namespace',
         '-f' => 'overwrite files'
-    ];
+    ];    
 
     /**
-     * Creates a skeleton command file.
-     *
-     * @param array $params
+     * Creates a skeleton Migration file.
      */
     public function run(array $params=[])
     {
@@ -71,12 +68,12 @@ class MakeCommand extends BaseCommand
 
         if (empty($name))
         {
-            $name = CLI::prompt('Command name');
+            $name = CLI::prompt('Migration name');
         }
 
         // Format to CI standards
         $name = ucfirst($name);
-        $view = 'Command/Command';
+        $view = 'Migration/Migration';
 
         $data = [
           'namespace' => 'namespace' => CLI::getOption('n') ?? 'App',
@@ -84,7 +81,7 @@ class MakeCommand extends BaseCommand
           'today'     => date('Y-m-d H:i:a')
         ];
 
-        $destination = $this->determineOutputPath('Commands',$data['namespace']).$name.'.php';
+        $destination = $this->determineOutputPath('Database\Migrations',$data['namespace']).$name.'.php';
 
         $overwrite = (bool)CLI::getOption('f');
 

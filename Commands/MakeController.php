@@ -34,6 +34,32 @@ class MakeController extends BaseCommand
      *
      * @param array $params
      */
+
+      /**
+     * the Command's usage
+     *
+     * @var string
+     */
+    protected $usage = 'make:controller [controller_name] [Options]';
+
+    /**
+     * the Command's Arguments
+     *
+     * @var array
+     */
+    protected $arguments = [
+        'controller_name' => 'The controller file name'
+    ];
+
+     /**
+     * the Command's Options
+     *
+     * @var array
+     */
+    protected $options = [
+        '-n' => 'Set Controller namespace',
+        '-f' => 'overwrite files'
+    ];
     public function run(array $params=[])
     {
         /*
@@ -58,7 +84,7 @@ class MakeController extends BaseCommand
             : 'Controller/SimpleController';
 
         $data = [
-            'namespace' => 'App\Controllers',
+            'namespace' => 'namespace' => CLI::getOption('n') ?? 'App',
             'name'      => $name,
             'today'     => date('Y-m-d H:i:a')
         ];
@@ -69,7 +95,7 @@ class MakeController extends BaseCommand
             $data = array_merge($data, $this->getCRUDOptions());
         }
 
-        $destination = $this->determineOutputPath('Controllers').$name.'.php';
+        $destination = $this->determineOutputPath('Controllers',$data['namespace']).$name.'.php';
 
         $overwrite = (bool)CLI::getOption('f');
 
