@@ -10,16 +10,12 @@ class {name} extends Controller
      */
     protected $model;
 
-    //--------------------------------------------------------------------
-
     public function __construct(...$params)
     {
         parent::__construct(...$params);
 
         $this->model = new {model}();
     }
-
-    //--------------------------------------------------------------------
 
     /**
      * Displays the paginated results.
@@ -31,52 +27,60 @@ class {name} extends Controller
         ]);
     }
 
-    //--------------------------------------------------------------------
-
     /**
-     * Handles the POST request to create a new object.
+     * Displays the New Object form.
      */
     public function create()
     {
-
+        echo view('{name}/form', [
+            'pageAction' => 'create'
+        ]);
     }
-
-    //--------------------------------------------------------------------
 
     /**
      * Handles the GET request to display the object.
      *
-     * @param string $hashID
+     * @param int $id
      */
-    public function show(string $hashID)
+    public function show(int $id)
     {
+        $item = $this->model->find($id);
+
+        if (is_null($item))
+        {
+            return redirect()->back()->withInput()->with('error', 'Object not found');
+        }
+
         echo view('{name}/show', [
-            'row' => $this->model->findByHashedID($hashID)
+            'pageAction' => 'edit',
+            'item'       => $item
         ]);
     }
 
-    //--------------------------------------------------------------------
-
     /**
-     * Handles the POST request to update an existing object.
-     *
-     * @param string $hashID
+     * Saves an object. Used for both creating
+     * a new object, and updating an existing one.
      */
-    public function update(string $hashID)
+    public function save(int $id = null)
     {
+        $item = new Entity($this->request->getPost());
+        $item->id = $id;
 
+        if (! $this->model->save($item))
+        {
+            return redirect()->withInput()->with('errors', $model->errors());
+        }
+
+        return redirect('{namespace}\{name}::listAll');
     }
 
-    //--------------------------------------------------------------------
     /**
      * Handles the POST request to delete an existing object.
      *
-     * @param string $hashID
+     * @param int The user id
      */
-    public function delete(string $hashID)
+    public function delete(int $id)
     {
-        $id = $this->model->decodeID($hashID);
-
         if (! $this->model->delete($id))
         {
             session()->setFlashdata('error', $this->model->errors());
@@ -85,5 +89,4 @@ class {name} extends Controller
         return redirect('{namespace}\{name}::listAll');
     }
 
-    //--------------------------------------------------------------------
 }
