@@ -84,7 +84,7 @@ class MakeController extends BaseCommand
             : 'Controller/SimpleController';
 
         $data = [
-            'namespace' => 'namespace' => CLI::getOption('n') ?? 'App',
+            'namespace' => CLI::getOption('n') ?? 'App',
             'name'      => $name,
             'today'     => date('Y-m-d H:i:a')
         ];

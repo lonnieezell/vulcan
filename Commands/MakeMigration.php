@@ -76,7 +76,7 @@ class MakeMigration extends BaseCommand
         $view = 'Migration/Migration';
 
         $data = [
-          'namespace' => 'namespace' => CLI::getOption('n') ?? 'App',
+          'namespace' => CLI::getOption('n') ?? 'App',
           'name'      => $name,
           'today'     => date('Y-m-d H:i:a')
         ];

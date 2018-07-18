@@ -28,7 +28,7 @@ class MakeFilter extends BaseCommand
 	 *
 	 * @var string
 	 */
-	protected $description = 'Creates a skeleton Filter class.';
+	protected $description = 'Creates a skeleton Controller Filter class.';
 
 	/**
 	 * Creates a skeleton command file.
