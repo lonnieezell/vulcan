@@ -7,11 +7,8 @@ Vulcan is a set of command line interface tools for CodeIgniter 4 that help you 
 ## Features
 
 - Integrates seamlessly into a CodeIgniter 4 project
-- One install can be used across any number of CodeIgniter 4 projects
-- Create as many custom libraries of generators to keep work and hobby libraries separate
 - Generate boilerplate code you don't like writing every time
-- Rapidly generate test data sets (coming soon)
-- Interactive REPL environment to test out features. (coming soon)
+- Interactive REPL environment to test out features.
 - and likely more!
 
 ##Installation
