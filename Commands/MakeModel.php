@@ -106,7 +106,7 @@ class MakeModel extends BaseCommand
         {
             $this->optionsList['table'] = empty($options['table'])
                 ? CLI::prompt('Table name', plural(strtolower(str_replace('Model', '', $name))))
-                : $optionsList['table'];
+                : $this->optionsList['table'];
         }
 
         // Primary Key
@@ -114,10 +114,10 @@ class MakeModel extends BaseCommand
         {
             $this->optionsList['primaryKey'] = empty($options['primaryKey'])
                 ? CLI::prompt('Primary key', 'id')
-                : $optionsList['primaryKey'];
+                : $this->optionsList['primaryKey'];
         }
 
-        $this->optionsList['namespace'] = 'namespace' => CLI::getOption('n') ?? 'App',
+        $this->optionsList['namespace'] = CLI::getOption('n') ?? 'App';
 
         // Collect the fields from the table itself, if we have one
         $this->optionsList['allowedFields'] = $this->tableInfo($this->optionsList['table'], $options);

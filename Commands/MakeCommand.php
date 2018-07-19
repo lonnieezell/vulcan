@@ -79,7 +79,7 @@ class MakeCommand extends BaseCommand
         $view = 'Command/Command';
 
         $data = [
-          'namespace' => 'namespace' => CLI::getOption('n') ?? 'App',
+          'namespace' => CLI::getOption('n') ?? 'App',
           'name'      => $name,
           'today'     => date('Y-m-d H:i:a')
         ];
