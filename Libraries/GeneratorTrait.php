@@ -279,7 +279,7 @@ trait GeneratorTrait
         if (empty($this->parser))
         {
             $path         = realpath(__DIR__.'/../Views/').'/';
-            $this->parser = new Parser(new \Config\View(), $path);
+            $this->parser = Services::parser($path);
         }
 
         if (is_null($this->parser))
@@ -477,7 +477,7 @@ trait GeneratorTrait
         $config = new Autoload();      
         $location = $config->psr4[$namespace];
 
-        $path = $location . "/". $folder; 
+        $path = rtrim($location, '/') . "/". $folder;
 
         return rtrim($path, '/ ') .'/';
     }

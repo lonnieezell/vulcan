@@ -1,6 +1,8 @@
-@php namespace {namespace};
+@php namespace {namespace}\Controllers;
 
+use CodeIgniter\Entity;
 use CodeIgniter\Controller;
+use {namespace}\Models\{model};
 
 class {name} extends Controller
 {
@@ -10,10 +12,8 @@ class {name} extends Controller
      */
     protected $model;
 
-    public function __construct(...$params)
+    public function __construct()
     {
-        parent::__construct(...$params);
-
         $this->model = new {model}();
     }
 
@@ -41,6 +41,8 @@ class {name} extends Controller
      * Handles the GET request to display the object.
      *
      * @param int $id
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function show(int $id)
     {
@@ -60,15 +62,20 @@ class {name} extends Controller
     /**
      * Saves an object. Used for both creating
      * a new object, and updating an existing one.
+     *
+     * @param int
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function save(int $id = null)
     {
+        // @todo Change Entity to the proper Entity type, i.e. User, Post, etc
         $item = new Entity($this->request->getPost());
         $item->id = $id;
 
         if (! $this->model->save($item))
         {
-            return redirect()->withInput()->with('errors', $model->errors());
+            return redirect()->withInput()->with('errors', $this->model->errors());
         }
 
         return redirect('{namespace}\{name}::listAll');
@@ -77,10 +84,13 @@ class {name} extends Controller
     /**
      * Handles the POST request to delete an existing object.
      *
-     * @param int The user id
+     * @param int
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function delete(int $id)
     {
+        // Try to delete, or flash the messages.
         if (! $this->model->delete($id))
         {
             session()->setFlashdata('error', $this->model->errors());
@@ -88,5 +98,4 @@ class {name} extends Controller
 
         return redirect('{namespace}\{name}::listAll');
     }
-
 }

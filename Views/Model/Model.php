@@ -1,4 +1,4 @@
-@php namespace {namespace};
+@php namespace {namespace}\Models;
 
 use CodeIgniter\Model;
 

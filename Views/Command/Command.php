@@ -1,4 +1,4 @@
-@php namespace {namespace};
+@php namespace {namespace}\Commands;
 
 use CodeIgniter\CLI\CLI;
 use CodeIgniter\CLI\BaseCommand;
