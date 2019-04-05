@@ -21,7 +21,7 @@ trait GeneratorTrait
      /**
      * @var const
      */
-    protected $rootPath = BASEPATH . "../";
+    protected $rootPath = SYSTEMPATH . "../";
 
     //--------------------------------------------------------------------
 
@@ -319,7 +319,7 @@ trait GeneratorTrait
         $path = $this->normalizePath($path);
 
         // If it's writing to BASEPATH - FIX IT
-        if (strpos($path, $this->normalizePath(BASEPATH)) === 0)
+        if (strpos($path, $this->normalizePath(SYSTEMPATH)) === 0)
         {
             return APPPATH.$path;
         }
@@ -474,7 +474,7 @@ trait GeneratorTrait
     protected function determineOutputPath($folder='', $namespace = 'App')
     {
         // Get namespace location form  PSR4 paths.
-        $config = new Autoload();      
+        $config = new Autoload();
         $location = $config->psr4[$namespace];
 
         $path = rtrim($location, '/') . "/". $folder;

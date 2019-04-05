@@ -5,5 +5,8 @@
     "license": "MIT",
     "require": {
         "psy/psysh": "@stable"
+    },
+    "require-dev": {
+
     }
 }

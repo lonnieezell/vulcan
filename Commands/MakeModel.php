@@ -45,14 +45,15 @@ class MakeModel extends BaseCommand
     protected $options = array(
         '-n' => 'Set model namespace',
         '-f' => 'overwrite files'
-    );   
+    );
 
     protected $optionsList = [
+        'namespace'       => 'App',
         'name'            => '',
         'table'           => '',
         'primaryKey'      => '',
         'dateFormat'      => 'datetime',
-        'useSoftDeletes'  => true,
+        'useSoftDeletes'  => false,
         'allowedFields'   => '',
         'useTimestamps'   => true,
         'createdField'    => 'created_at',
@@ -341,6 +342,7 @@ class MakeModel extends BaseCommand
     public function prepareData()
     {
         $data = [
+            'namespace'       => $this->optionsList['namespace'],
             'name'            => $this->optionsList['name'],
             'table'           => $this->optionsList['table'],
             'primaryKey'      => $this->optionsList['primaryKey'],
