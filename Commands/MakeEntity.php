@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace Vulcan\Commands;
 
 use CodeIgniter\CLI\BaseCommand;
@@ -33,7 +33,6 @@ class MakeEntity extends BaseCommand
     protected $options = [
         'table'         => null,
 	    'propertyList'  => '',
-        'docProperties' => '',
         'dates'         => []
     ];
 
@@ -43,7 +42,7 @@ class MakeEntity extends BaseCommand
     public function run(array $params=[])
     {
         /*
-         * Name 
+         * Name
          */
         $name = array_shift($params);
 
@@ -63,7 +62,6 @@ class MakeEntity extends BaseCommand
 			'name'          => $name,
 			'today'         => date('Y-m-d H:i:a'),
 			'propertyList'  => $this->options['propertyList'],
-            'docProperties' => $this->options['docProperties'],
             'casts'         => $this->options['dates'],
         ];
 
@@ -130,12 +128,10 @@ class MakeEntity extends BaseCommand
 	protected function formatProperties(array $fields)
 	{
 		$properties = [];
-		$docProperties = [];
 
 		foreach ($fields as $field)
 		{
 			$properties[]    = "\tprotected \${$field->name};";
-            $docProperties[] = " * @property \${$field->name}";
 
             if (in_array($field->name, ['created_at', 'updated_at']))
             {
@@ -144,7 +140,6 @@ class MakeEntity extends BaseCommand
 		}
 
 		$this->options['propertyList'] = implode("\n", $properties);
-		$this->options['docProperties'] = implode("\n", $docProperties);
 
 		// Format our dates string if we have anything there
         if (! empty($this->options['dates']))
