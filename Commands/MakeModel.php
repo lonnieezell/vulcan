@@ -314,7 +314,7 @@ class MakeModel extends BaseCommand
                 case 'char':
                 case 'varchar':
                 case 'text':
-                    $rule[] = 'alpha_numeric_spaces';
+                    $rule[] = 'string';
                     break;
             }
 
