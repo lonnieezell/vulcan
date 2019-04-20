@@ -24,17 +24,6 @@ composer.json file:
 "lonnieezell/vulcan": "dev-develop"
 ```
 
-**Let Your CodeIgniter Project Know**
-
-We need to let your project know where to find the commands, so open up `/application/Config/Autoload.php` and create 
-the `Vulcan` namespace in the `$psr4` array:
-
-```
-public $psr4 = [
-    'Vulcan' => ROOTPATH.'vendor/lonnieezell/vulcan',
-];
-```
-
 ### Manual Installation
 
 Clone the repo to somewhere you'll find it again:
@@ -64,15 +53,6 @@ public $psr4 = [
 ];
 ```
 
-Also we need to do a symlink of the vulcan dependencies (this is provisional):
-
-```
-rm -rf vendor
-ln -s /home/vulcan/vendor .
-```
-
-Remember to give it the actual path on your drive, not mine.
-
 Now can we use it? You bet!
 
 **Get Creating**
@@ -84,3 +64,8 @@ $ php spark
 ```
 
 This will provide a list of commands and a short explanation.
+
+## Using the Interactive Debugger
+
+Vulcan packages the excellent [PsySH](https://psysh.org/) repl and interactive debugger. Be sure to use read its 
+manual to see all of the great things it can do.
