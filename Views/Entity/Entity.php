@@ -9,11 +9,9 @@ use CodeIgniter\Entity;
  */
 class {! name !} extends Entity
 {
-{! propertyList !}
+    protected $datamap = [];
 
-	protected $_options = [
-        'datamap' => [],
-        'dates' => ['created_at', 'updated_at'],
-        'casts'   => [{! casts !}],
-    ];
+    protected $dates = ['created_at', 'updated_at'];
+
+    protected $casts = [{! casts !}];
 }
